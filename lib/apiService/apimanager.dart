@@ -10,32 +10,36 @@ import 'package:twsuser/routing/bouncypageroute.dart';
 import 'package:twsuser/screen/homescreen.dart';
 import 'package:twsuser/screen/mycheckin.dart';
 import 'package:twsuser/screen/orderplaced.dart';
-import 'package:twsuser/screen/sucessfulpage.dart';
 import 'package:twsuser/twsuser/otp.dart';
 import 'package:twsuser/twsuser/setupprofile.dart';
+
 import 'AppConstant.dart';
 import 'apiRepository.dart';
 import 'apiResponse/ResponseFetchChatMessage.dart';
-import 'apiResponse/ResponseProfile.dart';
 import 'apiResponse/ResponseReviewProfile.dart';
 import 'apiResponse/responsesubscription.dart';
 
-class ApiManager extends ChangeNotifier{
-
+class ApiManager extends ChangeNotifier {
   APIRepository _apiRepository = APIRepository();
 
   ////////////// login Api //////////////////////
+  Future getGender() async {
+    return await SharedPrefManager.getPrefrenceString(AppConstant.GENDER);
+  }
 
-  Future loginApi(String phone) async{
-
+  Future loginApi(String phone) async {
     await SharedPrefManager.savePrefString(AppConstant.NUMBER, phone);
 
     var response = await _apiRepository.loginApi(phone);
-    if(response['error_code'] == 1){
-      navigatorKey.currentState.push(BouncyPageRoute(widget: OtpScreen(phone:phone,otp:response['otp'].toString())));
-      await SharedPrefManager.savePrefString(AppConstant.PHONE, response['data']['phone']);
-      await SharedPrefManager.savePrefString(AppConstant.EMAIL, response['data']['email']);
-      await SharedPrefManager.savePrefString(AppConstant.NAME, response['data']['name']);
+    if (response['error_code'] == 1) {
+      navigatorKey.currentState.push(BouncyPageRoute(
+          widget: OtpScreen(phone: phone, otp: response['otp'].toString())));
+      await SharedPrefManager.savePrefString(
+          AppConstant.PHONE, response['data']['phone']);
+      await SharedPrefManager.savePrefString(
+          AppConstant.EMAIL, response['data']['email']);
+      await SharedPrefManager.savePrefString(
+          AppConstant.NAME, response['data']['name']);
       Fluttertoast.showToast(
           msg: response['otp'].toString(),
           toastLength: Toast.LENGTH_SHORT,
@@ -44,8 +48,9 @@ class ApiManager extends ChangeNotifier{
           backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
-    }else{
-      navigatorKey.currentState.push(BouncyPageRoute(widget: OtpScreen(phone:phone,otp:response['otp'].toString())));
+    } else {
+      navigatorKey.currentState.push(BouncyPageRoute(
+          widget: OtpScreen(phone: phone, otp: response['otp'].toString())));
 
       Fluttertoast.showToast(
           msg: response['otp'].toString(),
@@ -60,31 +65,45 @@ class ApiManager extends ChangeNotifier{
 
   ///////////// otp Api ////////////////////////
 
-  Future verifyOtp(String phone,String otp) async{
-    var response = await _apiRepository.verifyOtpApi(phone,otp);
-    if(response['error_code'] == 1){
-      if(response['response_string'] == "NEW_USER"){
-        navigatorKey.currentState.push(BouncyPageRoute(widget: (RegisterSetUpProfile())));
-      }else{
-        await SharedPrefManager.savePrefString(AppConstant.KEY, response['data']['client_key'].toString());
-        navigatorKey.currentState.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
+  Future verifyOtp(String phone, String otp) async {
+    var response = await _apiRepository.verifyOtpApi(phone, otp);
+    if (response['error_code'] == 1) {
+      if (response['response_string'] == "NEW_USER") {
+        navigatorKey.currentState
+            .push(BouncyPageRoute(widget: (RegisterSetUpProfile())));
+      } else {
+        await SharedPrefManager.savePrefString(
+            AppConstant.KEY, response['data']['client_key'].toString());
+        navigatorKey.currentState.pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
         SharedPrefManager.savePreferenceBoolean(true);
       }
-    }else{}
+    } else {}
   }
-
 
   ///////////// register Api ///////////////////////
 
-  Future registerApi(String phone,String email,String name,String location,String workOutExperience,String gender,String dob,String weight,String height,String goal) async{
-    var response = await _apiRepository.registerApi(phone,email,name, location, workOutExperience, gender, dob, weight, height, goal);
-    if(response['error_code'] == 1){
+  Future registerApi(
+      String phone,
+      String email,
+      String name,
+      String location,
+      String workOutExperience,
+      String gender,
+      String dob,
+      String weight,
+      String height,
+      String goal) async {
+    var response = await _apiRepository.registerApi(phone, email, name,
+        location, workOutExperience, gender, dob, weight, height, goal);
+    if (response['error_code'] == 1) {
       print(response['data']['client_key'].toString());
-      await SharedPrefManager.savePrefString(AppConstant.KEY, response['data']['client_key'].toString());
-      navigatorKey.currentState.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
+      await SharedPrefManager.savePrefString(
+          AppConstant.KEY, response['data']['client_key'].toString());
+      navigatorKey.currentState.pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
       SharedPrefManager.savePreferenceBoolean(true);
-    }else{
-    }
+    } else {}
   }
 
   //////////////////////////////// fetchProfileApi/////////////////////////////////
@@ -92,49 +111,69 @@ class ApiManager extends ChangeNotifier{
   Future fetchProfileApi() async {
     try {
       var response = await _apiRepository.fetchProfileApi();
-      print(response['error_code'].toString()+"sssssss");
-      if(response['error_code'] == 0){}else{
-        await SharedPrefManager.savePrefString(AppConstant.PHONE, response['data']['phone']);
-        await SharedPrefManager.savePrefString(AppConstant.USERIDGRAPH, response['data']['id']);
-        await SharedPrefManager.savePrefString(AppConstant.EMAIL, response['data']['email']);
-        await SharedPrefManager.savePrefString(AppConstant.NAME, response['data']['name']);
-        await SharedPrefManager.savePrefString(AppConstant.GENDER, response['data']['gender']);
-        if(response['data']['image']!=null){
-          await SharedPrefManager.savePrefString(AppConstant.IMAGE, response['data']['image']);
-        }}
-      return response;
-    } catch (e) {
-      print(e);}}
-
-  ////////////////////// useRefCodeApi/////////////////
-
-  Future<ResponseReferalStatus> useRefCodeApi(String refCode,BuildContext context) async {
-    try {
-      var response = await _apiRepository.useRefCodeApi(refCode);
-      if(response.errorCode == 0){
-         Fluttertoast.showToast(msg: "Hi,Please use valid referal code");
-      }else{
-        Fluttertoast.showToast(msg: "Referral code had been attached successfully");
-        await SharedPrefManager.savePrefString(AppConstant.STATUS, response.data.privacyStatus);
-        await SharedPrefManager.savePrefString(AppConstant.TRAINERID, response.data.id.toString());
-        navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (context)=> HomeScreen()));
+      print(response['error_code'].toString() + "sssssss");
+      if (response['error_code'] == 0) {
+      } else {
+        await SharedPrefManager.savePrefString(
+            AppConstant.PHONE, response['data']['phone']);
+        await SharedPrefManager.savePrefString(
+            AppConstant.USERIDGRAPH, response['data']['id']);
+        await SharedPrefManager.savePrefString(
+            AppConstant.EMAIL, response['data']['email']);
+        await SharedPrefManager.savePrefString(
+            AppConstant.NAME, response['data']['name']);
+        await SharedPrefManager.savePrefString(
+            AppConstant.GENDER, response['data']['gender']);
+        if (response['data']['image'] != null) {
+          await SharedPrefManager.savePrefString(
+              AppConstant.IMAGE, response['data']['image']);
+        }
       }
       return response;
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
+  ////////////////////// useRefCodeApi/////////////////
+
+  Future<ResponseReferalStatus> useRefCodeApi(
+      String refCode, BuildContext context) async {
+    try {
+      var response = await _apiRepository.useRefCodeApi(refCode);
+      if (response.errorCode == 0) {
+        Fluttertoast.showToast(msg: "Hi,Please use valid referal code");
+      } else {
+        Fluttertoast.showToast(
+            msg: "Referral code had been attached successfully");
+        await SharedPrefManager.savePrefString(
+            AppConstant.STATUS, response.data.privacyStatus);
+        await SharedPrefManager.savePrefString(
+            AppConstant.TRAINERID, response.data.id.toString());
+        navigatorKey.currentState.pushReplacement(
+            MaterialPageRoute(builder: (context) => HomeScreen()));
+      }
+      return response;
+    } catch (e) {
+      print(e);
+    }
+  }
 
   ////////////////////// fetchTrainerProfileApi/////////////////
 
   Future<ResponseReviewProfile> fetchTrainerProfileApi() async {
     try {
       var response = await _apiRepository.trainerPreviewScreenApi();
-      if(response.errorCode.toString() == "0"){}else{
-        await SharedPrefManager.savePrefString(AppConstant.TRAINERID, response.data.id.toString());
-        return response;}
+      if (response.errorCode.toString() == "0") {
+      } else {
+        await SharedPrefManager.savePrefString(
+            AppConstant.TRAINERID, response.data.id.toString());
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   ////////////////////// questionApi/////////////////
 
@@ -142,121 +181,152 @@ class ApiManager extends ChangeNotifier{
     try {
       var response = await _apiRepository.questionApi();
       // if(response.errorCode == 0){}else{
-        return response;
+      return response;
       // }
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
   ////////////isSubscriptionApi///////////////////
 
   Future<ResponseSubscription> isSubscriptionApi(BuildContext context) async {
     try {
       var response = await _apiRepository.isSubscriptionTakenApi();
-      if(response.errorCode.toString() == "0"){
-        await SharedPrefManager.savePrefString(AppConstant.ISSUBSCRIPTION, "NO");
-      }else{
+      if (response.errorCode.toString() == "0") {
+        await SharedPrefManager.savePrefString(
+            AppConstant.ISSUBSCRIPTION, "NO");
+      } else {
         // SharedPrefManager.savePrefString(AppConstant.STATUS, "PUBLIC");
-        await SharedPrefManager.savePrefString(AppConstant.TRAINERID, response.data.trainerId.toString());
-        await SharedPrefManager.savePrefString(AppConstant.USERID, response.data.userId.toString());
-        SharedPrefManager.savePrefString(AppConstant.TRAINERSUBSCRIPTION, "SUBSCRIPTION");
+        await SharedPrefManager.savePrefString(
+            AppConstant.TRAINERID, response.data.trainerId.toString());
+        await SharedPrefManager.savePrefString(
+            AppConstant.USERID, response.data.userId.toString());
+        SharedPrefManager.savePrefString(
+            AppConstant.TRAINERSUBSCRIPTION, "SUBSCRIPTION");
       }
       return response;
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
   ////////////blogApi///////////////////
 
   Future<ResponseBlogs> blogApi() async {
     try {
       var response = await _apiRepository.blogApi();
-      if(response.errorCode == 0){
-      }else{
+      if (response.errorCode == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
   ////////////////////// startSevenDaysTrialApi/////////////////
 
   Future startSevenDaysTrial() async {
     try {
       var response = await _apiRepository.startSevenDaysTrial();
-      if(response['error_code'] == 0){}else{
-
-        navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (builder) => HomeScreen()));
+      if (response['error_code'] == 0) {
+      } else {
+        navigatorKey.currentState.pushReplacement(
+            MaterialPageRoute(builder: (builder) => HomeScreen()));
       }
       return response;
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
-      //////////////////////// startSubscriptionApi ///////////////////
+  //////////////////////// startSubscriptionApi ///////////////////
 
   Future startSubscriptionApi(String packageId) async {
     try {
       var response = await _apiRepository.startSubscriptionApi(packageId);
-      if(response['error_code'] == 0){}else{
-        navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (builder) => OrderPlaced()));
+      if (response['error_code'] == 0) {
+      } else {
+        navigatorKey.currentState.pushReplacement(
+            MaterialPageRoute(builder: (builder) => OrderPlaced()));
       }
       return response;
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// fetchCertificateTrainerApi ///////////////////
 
   Future fetchCertificateTrainerApi(String clientKey) async {
     try {
       var response = await _apiRepository.fetchCertificateTrainerApi(clientKey);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
-      //////fetchTransFormationApi
+  //////fetchTransFormationApi
 
   Future fetchTransFormationApi(String clientKey) async {
     try {
       var response = await _apiRepository.fetchTransformationApi(clientKey);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
+      print(e);
+    }
+  }
 
   /////////////////////////// fetchMemberTrainerApi ////////////////////////////
 
   Future fetchMemberTrainerApi(String clientKey) async {
     try {
       var response = await _apiRepository.fetchMemberTrainerApi(clientKey);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// fetchMembershipPackageTrainerApi ///////////////////
 
   Future fetchMembershipPackageTrainerApi(String clientKey) async {
     try {
-      var response = await _apiRepository.fetchMembershipPackageTrainerApi(clientKey);
-      if(response['error_code'] == 0){}else{
+      var response =
+          await _apiRepository.fetchMembershipPackageTrainerApi(clientKey);
+      if (response['error_code'] == 0) {
+      } else {
         return response;
-      }} catch (e) {
-      print(e);}}
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   ///////////////////////////// fetchDietByDatesApi //////////////////////////
 
   Future fetchDietByDatesApi(String date) async {
     try {
       var response = await _apiRepository.fetchDietByDates(date);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// fetchWorkoutApi //////////////////////////////
 
@@ -264,113 +334,166 @@ class ApiManager extends ChangeNotifier{
     try {
       var response = await _apiRepository.fetchWorkoutApi();
       print(response['error_code']);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
       print(e);
-    }}
+    }
+  }
 
   /////////////////////////// fetch_exercise_by_workout_id ///////////////////
 
   Future fetchExerciseByWorkoutId(String workoutId) async {
     try {
       var response = await _apiRepository.fetchExerciseByWorkoutApi(workoutId);
-      if(response['error_code'] == 0){}else{
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// mealTakenApi ///////////////////
 
-  Future mealTakenApi(String mealId,String foodId) async {
+  Future mealTakenApi(String mealId, String foodId) async {
     try {
-      var response = await _apiRepository.mealTakenApi(mealId,foodId);
-      if(response['error_code'] == 0){}else{
-        return response;}
+      var response = await _apiRepository.mealTakenApi(mealId, foodId);
+      if (response['error_code'] == 0) {
+      } else {
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// fetchWorkoutByDatesApi ///////////////////
 
   Future fetchWorkoutByDatesApi(String date) async {
     try {
       var response = await _apiRepository.fetchWorkoutByDatesApi(date);
-      if(response['error_code'] == 0){}else{
-        return response;}
+      if (response['error_code'] == 0) {
+      } else {
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// submitAnswerApi ///////////////////
 
-  Future submitAnswerApi(String question,String option,String description) async {
+  Future submitAnswerApi(
+      String question, String option, String description) async {
     try {
-      var response = await _apiRepository.submitAnswerApi(question, option, description);
-      if(response['error_code'] == 0){}else{
-        return response;}
+      var response =
+          await _apiRepository.submitAnswerApi(question, option, description);
+      if (response['error_code'] == 0) {
+      } else {
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// storeMeasurementApi ///////////////////
 
-  Future storeMeasurementApi(String weight,String neck,String thigh,String abs,String chestTriceps,String rightThigh,
-      String leftThigh,String hips,String waist,String lowerAbs,String upperAbs,String rightBiceps,String leftBiceps,
-      String chest,String shoulder) async {
+  Future storeMeasurementApi(
+      String weight,
+      String neck,
+      String thigh,
+      String abs,
+      String chestTriceps,
+      String rightThigh,
+      String leftThigh,
+      String hips,
+      String waist,
+      String lowerAbs,
+      String upperAbs,
+      String rightBiceps,
+      String leftBiceps,
+      String chest,
+      String shoulder) async {
     try {
-      var response = await _apiRepository.storeSubscriptionApi(weight, neck, thigh, abs, chestTriceps, rightThigh, leftThigh, hips, waist, lowerAbs, upperAbs, rightBiceps, leftBiceps, chest, shoulder);
-      if(response['error_code'] == 0){}else{
-        return response;}
+      var response = await _apiRepository.storeSubscriptionApi(
+          weight,
+          neck,
+          thigh,
+          abs,
+          chestTriceps,
+          rightThigh,
+          leftThigh,
+          hips,
+          waist,
+          lowerAbs,
+          upperAbs,
+          rightBiceps,
+          leftBiceps,
+          chest,
+          shoulder);
+      if (response['error_code'] == 0) {
+      } else {
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// sendMessageApi ////////////////////////////////
 
   Future sendMessageApi(msg) async {
     try {
       var response = await _apiRepository.sendMessageApi(msg);
-      if(response['error_code'] == 0){}else{
-        return response;}
+      if (response['error_code'] == 0) {
+      } else {
+        return response;
+      }
     } catch (e) {
-      print(e);}}
-
+      print(e);
+    }
+  }
 
   /////////////////////////// newsendMessageApi ////////////////////////////////
 
-  Future newSendMessageApi(msg,filename) async {
+  Future newSendMessageApi(msg, filename) async {
     try {
       var response = await _apiRepository.newSendMessageApi(msg, filename);
-      if(response['error_code'] == 0){}else{
-        return response;}
-    } catch (e) {
-      print(e);}}
-
- //////////////////////////////FetchIndividualChatApi ////////////////////////////////
-
-  Future<ResponseFetchChatMessage> fetchIndividualChat() async {
-      final response = await _apiRepository.fetchIndividualChat();
-      if (response.errorCode.toString() == "1") {
+      if (response['error_code'] == 0) {
+      } else {
         return response;
       }
+    } catch (e) {
+      print(e);
     }
+  }
 
+  //////////////////////////////FetchIndividualChatApi ////////////////////////////////
+
+  Future<ResponseFetchChatMessage> fetchIndividualChat() async {
+    final response = await _apiRepository.fetchIndividualChat();
+    if (response.errorCode.toString() == "1") {
+      return response;
+    }
+  }
 
   ///////////////////add Food Api////////////////////////
 
-  Future addFoodApi(String name,String protein,String carb,String fats,String id) async {
+  Future addFoodApi(
+      String name, String protein, String carb, String fats, String id) async {
     try {
       var response = await _apiRepository.addFoodApi(name, protein, carb, fats);
       print(response['error_code'].toString());
-      if(response['error_code'] == 1){
-        addFoodToMealApi(response['data']['id'].toString(),id);
+      if (response['error_code'] == 1) {
+        addFoodToMealApi(response['data']['id'].toString(), id);
       }
-      return Fluttertoast.showToast(msg: response['reponse_string'],
-          gravity: ToastGravity.BOTTOM);
+      return Fluttertoast.showToast(
+          msg: response['reponse_string'], gravity: ToastGravity.BOTTOM);
       // navigatorKey.currentState.push(BouncyPageRoute(widget: WorkOut()));
     } catch (e) {
       print(e);
@@ -379,15 +502,15 @@ class ApiManager extends ChangeNotifier{
 
   ///////////////////workOutTakenApi////////////////////////
 
-  Future workOutTakenApi(String id,String isDone) async {
+  Future workOutTakenApi(String id, String isDone) async {
     try {
       var response = await _apiRepository.workoutTakenApi(id, isDone);
       print(response['error_code'].toString());
-      if(response['error_code'] == 1){
-        addFoodToMealApi(response['data']['id'].toString(),id);
+      if (response['error_code'] == 1) {
+        addFoodToMealApi(response['data']['id'].toString(), id);
       }
-      return Fluttertoast.showToast(msg: response['reponse_string'],
-          gravity: ToastGravity.BOTTOM);
+      return Fluttertoast.showToast(
+          msg: response['reponse_string'], gravity: ToastGravity.BOTTOM);
       // navigatorKey.currentState.push(BouncyPageRoute(widget: WorkOut()));
     } catch (e) {
       print(e);
@@ -396,34 +519,36 @@ class ApiManager extends ChangeNotifier{
 
   ///////////////////add Food To Meal Api////////////////////////
 
-  Future addFoodToMealApi(String id,String mealId) async {
+  Future addFoodToMealApi(String id, String mealId) async {
     try {
-      var response = await _apiRepository.addFoodToMealApi(id,mealId);
+      var response = await _apiRepository.addFoodToMealApi(id, mealId);
       // print(response['error_code'].toString());
-      navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (context) => MyCheckin()));
-      return Fluttertoast.showToast(msg: response['reponse_string'],
-          gravity: ToastGravity.BOTTOM);
+      navigatorKey.currentState.pushReplacement(
+          MaterialPageRoute(builder: (context) => MyCheckin()));
+      return Fluttertoast.showToast(
+          msg: response['reponse_string'], gravity: ToastGravity.BOTTOM);
       // navigatorKey.currentState.push(BouncyPageRoute(widget: WorkOut()));
     } catch (e) {
       print(e);
     }
   }
-
 
   ///////////////////add Food To Meal Api////////////////////////
 
-  Future questionSubmitApi(Set question,List<String> answer,List<String> description) async {
+  Future questionSubmitApi(
+      Set question, List<String> answer, List<String> description) async {
     try {
-      var response = await _apiRepository.questionSubmitApi(question,answer,description);
+      var response =
+          await _apiRepository.questionSubmitApi(question, answer, description);
       // print(response['error_code'].toString());
-      navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
-      return Fluttertoast.showToast(msg: "Physical question had been completed successfully",
+      navigatorKey.currentState.pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()));
+      return Fluttertoast.showToast(
+          msg: "Physical question had been completed successfully",
           gravity: ToastGravity.BOTTOM);
       // navigatorKey.currentState.push(BouncyPageRoute(widget: WorkOut()));
     } catch (e) {
       print(e);
     }
   }
-
-
 }

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:twsuser/apiService/apimanager.dart';
+
+import '../apiService/AppConstant.dart';
+import '../apiService/sharedprefrence.dart';
+
 class Measurements extends StatefulWidget {
   @override
   State<Measurements> createState() => _MeasurementsState();
 }
 
 class _MeasurementsState extends State<Measurements> {
-
   TextEditingController weightController = TextEditingController();
   TextEditingController neckController = TextEditingController();
   TextEditingController shoulderController = TextEditingController();
@@ -27,54 +30,63 @@ class _MeasurementsState extends State<Measurements> {
   TextEditingController thighController = TextEditingController();
   bool _isLoad = false;
 
-  void _trySubmit() async{
-
-    if(weightController.text.isEmpty){
-       Fluttertoast.showToast(msg: "Enter weight");
-    }else if(neckController.text.isEmpty){
+  void _trySubmit() async {
+    if (weightController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Enter weight");
+    } else if (neckController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter neck");
-    }else if(shoulderController.text.isEmpty){
+    } else if (shoulderController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter shoulders");
-    }else if(chestController.text.isEmpty){
+    } else if (chestController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter chest");
-    }else if(leftBicepsController.text.isEmpty){
+    } else if (leftBicepsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter left biceps");
-    }else if(rightBicepsController.text.isEmpty){
+    } else if (rightBicepsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter right biceps");
-    }else if(upperAbsController.text.isEmpty){
+    } else if (upperAbsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter upper abs");
-    }else if(waistController.text.isEmpty){
+    } else if (waistController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter waist");
-    }else if(lowerAbsController.text.isEmpty){
+    } else if (lowerAbsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter lower abs");
-    }else if(hipsController.text.isEmpty){
+    } else if (hipsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter hips");
-    }else if(leftThighController.text.isEmpty){
+    } else if (leftThighController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter left thigh");
-    }else if(rightThighController.text.isEmpty){
+    } else if (rightThighController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter right thigh");
-    }else if(chestTricepsController.text.isEmpty){
+    } else if (chestTricepsController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter chest/triceps");
-    }else if(absController.text.isEmpty){
+    } else if (absController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter abs");
-    }else if(thighController.text.isEmpty){
+    } else if (thighController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Enter left thigh");
-    }else{
+    } else {
       setState(() {
         _isLoad = true;
       });
 
-      await Provider.of<ApiManager>(context,listen: false).storeMeasurementApi(weightController.text, neckController.text, thighController.text, absController.text,
-          chestTricepsController.text, rightThighController.text, leftThighController.text, hipsController.text, waistController.text, lowerAbsController.text,
-          upperAbsController.text, rightBicepsController.text, leftBicepsController.text,
-          chestController.text, shoulderController.text);
+      await Provider.of<ApiManager>(context, listen: false).storeMeasurementApi(
+          weightController.text,
+          neckController.text,
+          thighController.text,
+          absController.text,
+          chestTricepsController.text,
+          rightThighController.text,
+          leftThighController.text,
+          hipsController.text,
+          waistController.text,
+          lowerAbsController.text,
+          upperAbsController.text,
+          rightBicepsController.text,
+          leftBicepsController.text,
+          chestController.text,
+          shoulderController.text);
 
       setState(() {
         _isLoad = false;
       });
-
     }
-
   }
 
   @override
@@ -106,44 +118,58 @@ class _MeasurementsState extends State<Measurements> {
           children: <Widget>[
             Stack(
               children: [
-                Image.asset("assets/images/spalsh.jpg",
-                  height: 130,width: MediaQuery.of(context).size.width,fit: BoxFit.cover,),
+                Image.asset(
+                  "assets/images/spalsh.jpg",
+                  height: 130,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
                 Positioned(
                     bottom: 15,
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.accessible_forward_rounded,color: Colors.white,size: 35,),
-                        SizedBox(width: 7,),
+                        Icon(
+                          Icons.accessible_forward_rounded,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
                         Container(
                           height: 40,
                           width: 2,
                           color: Color(0XFF2CB3BF),
                         ),
-                        SizedBox(width: 7,),
-                        Text("Measurement",
+                        SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          "Measurement",
                           style: TextStyle(
-                              fontSize: 22*MediaQuery.of(context).textScaleFactor,
+                              fontSize:
+                                  22 * MediaQuery.of(context).textScaleFactor,
                               color: Colors.white,
-                              fontWeight: FontWeight.w600
-                          ),)
+                              fontWeight: FontWeight.w600),
+                        )
                       ],
                     )),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Body Measurement",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black
-                    ),),
+                    child: Text(
+                      "Body Measurement",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
                   ),
-
                   Stack(
                     children: [
                       Container(
@@ -160,428 +186,523 @@ class _MeasurementsState extends State<Measurements> {
                       )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Weight",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Neck",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Weight",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Neck",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: weightController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Kg",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: weightController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Kg",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: neckController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: neckController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Shoulders",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Chest",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Shoulders",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Chest",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: shoulderController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: shoulderController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: chestController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: chestController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Left Biceps",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Right Biceps",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Left Biceps",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Right Biceps",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: leftBicepsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: leftBicepsController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: rightBicepsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: rightBicepsController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Upper Abs",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Waist",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Upper Abs",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Waist",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: upperAbsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: upperAbsController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: waistController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: waistController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Lower Abs",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Hips",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Lower Abs",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Hips",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: lowerAbsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: lowerAbsController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: hipsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: hipsController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Left Thigh",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Right Thigh",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Left Thigh",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Right Thigh",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: leftThighController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: leftThighController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: rightThighController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: rightThighController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
+                            hintText: "Inches/Centimeters",
                           ),
-                          hintText: "Inches/Centimeters",
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
                   SizedBox(
                     height: 25,
                   ),
-
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Skin Fold Measurement",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black
-                    ),),
+                    child: Text(
+                      "Skin Fold Measurement",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
                   ),
-
                   Stack(
                     children: [
                       Container(
@@ -598,173 +719,213 @@ class _MeasurementsState extends State<Measurements> {
                       )
                     ],
                   ),
-
-
-                  SizedBox(height: 20,),
-
-                  Row(
-                    children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Chest/triceps",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Abs",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                    ],
+                  SizedBox(
+                    height: 20,
                   ),
-
-                  SizedBox(height: 7,),
-
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: chestTricepsController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
-                          ),
-                        ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: absController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              fontSize: 12
-                          ),
-                          hintText: "Inches/Centimeters",
-                        ),
-                        onSaved: (String value) {},
-                      ),)
-                    ],
-                  ),
-
-
-                  SizedBox(height: 20,),
-
-                  Row(
-                    children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Thigh",style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0XFFAFAFAF)
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Visibility(
-                        visible: false,
-                        child: Expanded(child: Align(
+                      Expanded(
+                        child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Abs",style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0XFFAFAFAF)
-                          ),),
-                        ),),
+                          child: FutureBuilder(
+                            future: SharedPrefManager.getPrefrenceString(
+                                AppConstant.GENDER),
+                            builder: (contex, snapshot) => Text(
+                              snapshot.hasData
+                                  ? snapshot.data == 'MALE'
+                                      ? 'Chest'
+                                      : 'Triceps'
+                                  : "Chest/triceps",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0XFFAFAFAF)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Abs",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: thighController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Inches/Centimeters",
-                          hintStyle: TextStyle(
-                              fontSize: 12
-                          ),
-                        ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: Visibility(
-                        visible: false,
+                      Expanded(
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: chestTricepsController,
                           autovalidateMode: AutovalidateMode.always,
                           style: TextStyle(color: Color(0XFF262626)),
-                          decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
                             border: InputBorder.none,
-                            hintStyle: TextStyle(
-                                fontSize: 12
-                            ),
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
+                          ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: absController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 12),
                             hintText: "Inches/Centimeters",
                           ),
                           onSaved: (String value) {},
                         ),
-                      ),)
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Thigh",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0XFFAFAFAF)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Visibility(
+                        visible: false,
+                        child: Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Abs",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0XFFAFAFAF)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: thighController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Inches/Centimeters",
+                            hintStyle: TextStyle(fontSize: 12),
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Visibility(
+                          visible: false,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            autovalidateMode: AutovalidateMode.always,
+                            style: TextStyle(color: Color(0XFF262626)),
+                            decoration: InputDecoration(
+                              fillColor: Color(0XFFF2F2F2),
+                              filled: true,
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(fontSize: 12),
+                              hintText: "Inches/Centimeters",
+                            ),
+                            onSaved: (String value) {},
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
-
-
-            SizedBox(height: 15,),
-
-            if(_isLoad)
+            SizedBox(
+              height: 15,
+            ),
+            if (_isLoad)
               CircularProgressIndicator()
             else
               GestureDetector(
                 onTap: _trySubmit,
                 child: Container(
-                  margin: EdgeInsets.only(top: 0,bottom: 10,left: 10,right: 10),
+                  margin:
+                      EdgeInsets.only(top: 0, bottom: 10, left: 10, right: 10),
                   // width: MediaQuery.of(context).size.width,
                   height: 50,
                   child: Center(
-                    child: Text("SUBMIT",style: TextStyle(
-                        fontSize: 21,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600
-                    ),),),
+                    child: Text(
+                      "SUBMIT",
+                      style: TextStyle(
+                          fontSize: 21,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Color(0XFF299FAB),
                   ),
                 ),
               ),
-
           ],
         ),
       ),

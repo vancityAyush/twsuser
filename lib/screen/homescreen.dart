@@ -5,11 +5,13 @@ import 'package:twsuser/screen/account.dart';
 import 'package:twsuser/screen/homes.dart';
 import 'package:twsuser/screen/mycheckin.dart';
 import 'package:twsuser/screen/mytrainer.dart';
+
 import 'feedlist.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();}
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
@@ -23,38 +25,65 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    Provider.of<ApiManager>(context,listen: false).fetchProfileApi();
-    super.initState();}
+    Provider.of<ApiManager>(context, listen: false).fetchProfileApi();
+    super.initState();
+  }
 
   @override
   Widget build(Object context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptios.elementAt(_selectedIndex),),
+        child: _widgetOptios.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black87,
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Image.asset("assets/images/gallery.png",color: Colors.white,width: 34,height: 31,), title: Text('Gallery',style: TextStyle(
-            color: Colors.white),)),
+            icon: Image.asset(
+              "assets/images/gallery.png",
+              color: Colors.white,
+              width: 34,
+              height: 31,
+            ),
+            label: "Gallery",
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/images/chekc.png",color: Colors.white,width: 34,height: 31,), title: Text('Check-in'
-              ,style: TextStyle(
-                  color: Colors.white))),
+            icon: Image.asset(
+              "assets/images/chekc.png",
+              color: Colors.white,
+              width: 34,
+              height: 31,
+            ),
+            label: "Checkin",
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/images/feeds.png",color: Colors.white,width: 34,height: 31,), title: Text('Feeds',
-              style: TextStyle(
-                  color: Colors.white
-              ))),
+            icon: Image.asset(
+              "assets/images/feeds.png",
+              color: Colors.white,
+              width: 34,
+              height: 31,
+            ),
+            label: "Feeds",
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/images/trainer.png",color: Colors.white,width: 34,height: 31,), title: Text('My trainers',style: TextStyle(
-              color: Colors.white
-          ))),
+            icon: Image.asset(
+              "assets/images/trainer.png",
+              color: Colors.white,
+              width: 34,
+              height: 31,
+            ),
+            label: "Trainer",
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/images/account.png",color: Colors.white,width: 34,height: 31,), title: Text('Profile',style: TextStyle(
-              color: Colors.white
-          ))),
+            icon: Image.asset(
+              "assets/images/account.png",
+              color: Colors.white,
+              width: 34,
+              height: 31,
+            ),
+            label: "Account",
+          ),
         ],
         currentIndex: _selectedIndex,
         fixedColor: Colors.black87,
@@ -63,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onItemTapped(int index){
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });

@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:twsuser/apiService/apiResponse/ResponseProfile.dart';
@@ -13,7 +14,6 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-
   Data data = Data();
 
   TextEditingController nameController = TextEditingController();
@@ -26,16 +26,19 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController contactDetailController = TextEditingController();
   TextEditingController relationshipController = TextEditingController();
 
-  void fetchProfile() async{
-    var future =  Provider.of<ApiManager>(context,listen: false).fetchProfileApi();
-    future.then((value){
+  void fetchProfile() async {
+    var future =
+        Provider.of<ApiManager>(context, listen: false).fetchProfileApi();
+    future.then((value) {
+      var height = value['data']['height'].split(".");
+      var weight = value['data']['weight'].split(".");
       setState(() {
         print(value['data']['name']);
         nameController.text = value['data']['name'];
         genderController.text = value['data']['gender'];
         ageController.text = value['data']['dob'];
-        weightController.text = value['data']['weight'];
-        heightController.text = value['data']['height'];
+        weightController.text = weight[0].toString();
+        heightController.text = height[0].toString();
         goalController.text = value['data']['goal'];
         occupationController.text = value['data']['occupations'];
         contactDetailController.text = value['data']['phone'];
@@ -46,7 +49,7 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       fetchProfile();
     });
     super.initState();
@@ -73,19 +76,23 @@ class _MyProfileState extends State<MyProfile> {
         elevation: 0,
         backgroundColor: Color(0XFF2CB3BF),
         centerTitle: true,
-        title: Text("My Account",style: TextStyle(
-            color: Colors.white
-        ),),
+        title: Text(
+          "My Account",
+          style: TextStyle(color: Colors.white),
+        ),
         leading: Visibility(
-          visible: false,
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
+            visible: false,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               padding: EdgeInsets.all(15),
-              margin: EdgeInsets.only(top:8,bottom: 0,right: 20,left: 20),
+              margin: EdgeInsets.only(top: 8, bottom: 0, right: 20, left: 20),
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: Colors.white,
@@ -96,42 +103,44 @@ class _MyProfileState extends State<MyProfile> {
                       blurRadius: 6.0,
                     ),
                   ],
-                  borderRadius: BorderRadius.circular(8)
-              ),
+                  borderRadius: BorderRadius.circular(8)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-
-                  Text("Basic Profile",style: TextStyle(
-                      fontSize: 16*MediaQuery.of(context).textScaleFactor,
-                      color: Color(0XFF2CB3BF),
-                      fontWeight: FontWeight.w600),
+                  Text(
+                    "Basic Profile",
+                    style: TextStyle(
+                        fontSize: 16 * MediaQuery.of(context).textScaleFactor,
+                        color: Color(0XFF2CB3BF),
+                        fontWeight: FontWeight.w600),
                   ),
-
-                  SizedBox(height: 15,),
-
-
+                  SizedBox(
+                    height: 15,
+                  ),
                   CircleAvatar(
                     radius: 50,
                     backgroundImage: AssetImage("assets/images/spalsh.jpg"),
                   ),
-
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Name",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black
-                    ),),
+                    child: Text(
+                      "Name",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   TextFormField(
                     controller: nameController,
                     autovalidateMode: AutovalidateMode.always,
                     style: TextStyle(color: Color(0XFF262626)),
-                    decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
+                    decoration: InputDecoration(
+                      fillColor: Color(0XFFF2F2F2),
+                      filled: true,
                       border: InputBorder.none,
                       hintText: "Name",
                     ),
@@ -145,274 +154,348 @@ class _MyProfileState extends State<MyProfile> {
                       // code when the user saves the form.
                     },
                   ),
-
-                  SizedBox(height: 15,),
-
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Gender",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Age",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Gender",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Age",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: TextFormField(
-                        controller: genderController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Gender",
+                      Expanded(
+                        child: TextFormField(
+                          controller: genderController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Gender",
+                          ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: ageController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Age",
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: ageController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Age",
+                          ),
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),)
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 15,),
-
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Weight",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Height",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Weight",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Height",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-
-                      Expanded(child: TextFormField(
-                        controller: weightController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Weight",
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          controller: weightController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Weight",
+                          ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: heightController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Height",
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          controller: heightController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Height",
+                          ),
+                          onSaved: (String value) {},
+                          keyboardType: TextInputType.number,
                         ),
-                        onSaved: (String value) {},
-                      ),)
-
+                      )
                     ],
                   ),
-
-                  SizedBox(height: 15,),
-
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Goal",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
-                      SizedBox(width: 13,),
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Occupation",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Goal",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Occupation",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-
-                      Expanded(child: TextFormField(
-                        controller: goalController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Goal",
+                      Expanded(
+                        child: TextFormField(
+                          controller: goalController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Goal",
+                          ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: occupationController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Occupation",
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: occupationController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Occupation",
+                          ),
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),),
-
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 15,),
-
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Contact Details",style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Relationship Status",style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black
-                        ),),
-                      ),),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Contact Details",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Relationship Status",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 7,),
-
+                  SizedBox(
+                    height: 7,
+                  ),
                   Row(
                     children: [
-
-                      Expanded(child: TextFormField(
-                        controller: contactDetailController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Contact Details",
+                      Expanded(
+                        child: TextFormField(
+                          controller: contactDetailController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Contact Details",
+                          ),
+                          // decoration: const InputDecoration(
+                          //   hintText: 'Bio',
+                          //   labelText: 'Bio',
+                          //
+                          // ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
                         ),
-                        // decoration: const InputDecoration(
-                        //   hintText: 'Bio',
-                        //   labelText: 'Bio',
-                        //
-                        // ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                      ),),
-
-                      SizedBox(width: 13,),
-
-                      Expanded(child: TextFormField(
-                        controller: relationshipController,
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(color: Color(0XFF262626)),
-                        decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
-                          border: InputBorder.none,
-                          hintText: "Relationship Status",
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: relationshipController,
+                          autovalidateMode: AutovalidateMode.always,
+                          style: TextStyle(color: Color(0XFF262626)),
+                          decoration: InputDecoration(
+                            fillColor: Color(0XFFF2F2F2),
+                            filled: true,
+                            border: InputBorder.none,
+                            hintText: "Relationship Status",
+                          ),
+                          onSaved: (String value) {},
                         ),
-                        onSaved: (String value) {},
-                      ),),
-
+                      ),
                     ],
                   ),
-                      ],
-                    ),
-
-                  ),
-
+                ],
+              ),
+            ),
             GestureDetector(
-              onTap: ()async{
-                var future = await Provider.of<ApiManager>(context,listen: false).questionApi();
-                if(future.data[0].answer == null){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuestionFitness()));
-                }else{
-                  Fluttertoast.showToast(msg: "You have already given these physical question");
+              onTap: () async {
+                var future =
+                    await Provider.of<ApiManager>(context, listen: false)
+                        .questionApi();
+                if (future.data[0].answer == null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => QuestionFitness()));
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "You have already given these physical question");
                 }
               },
               child: Container(
@@ -424,7 +507,7 @@ class _MyProfileState extends State<MyProfile> {
                   color: Color(0XFF2CB3BF),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20,right: 15),
+                  padding: const EdgeInsets.only(left: 20, right: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -432,22 +515,28 @@ class _MyProfileState extends State<MyProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Complete your",
+                          Text(
+                            "Complete your",
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.white,
-                                fontWeight: FontWeight.normal
-                            ),),
+                                fontWeight: FontWeight.normal),
+                          ),
                           // SizedBox(height: 7,),
-                          Text("Fitness Profile",style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white
-                          ),),
+                          Text(
+                            "Fitness Profile",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white),
+                          ),
                         ],
                       ),
-
-                      Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,size: 30,)
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.white,
+                        size: 30,
+                      )
                     ],
                   ),
                 ),
@@ -459,7 +548,6 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 }
-
 
 /*SizedBox(height: 20,),
 
