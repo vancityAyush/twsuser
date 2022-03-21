@@ -1,8 +1,11 @@
 // @dart=2.9
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:twsuser/apiService/apiResponse/ResponseProfile.dart';
 import 'package:twsuser/apiService/apimanager.dart';
@@ -15,7 +18,8 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
   Data data = Data();
-
+  String imageUrl;
+  String imageLocal;
   TextEditingController nameController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController ageController = TextEditingController();
@@ -25,6 +29,38 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController occupationController = TextEditingController();
   TextEditingController contactDetailController = TextEditingController();
   TextEditingController relationshipController = TextEditingController();
+
+  void _trySubmit() async {
+    bool res =
+        await Provider.of<ApiManager>(context, listen: false).editProfileApi(
+            name: nameController.text,
+            gender: genderController.text,
+            dob: ageController.text,
+            weight: weightController.text,
+            height: heightController.text,
+            goal: goalController.text,
+            occupations: occupationController.text,
+            //contactDetailController.text,
+            relationship_status: relationshipController.text);
+    if (res) {
+      Fluttertoast.showToast(
+          msg: "Profile Updated",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else
+      Fluttertoast.showToast(
+          msg: "Profile Not Updated",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+  }
 
   void fetchProfile() async {
     var future =
@@ -43,6 +79,7 @@ class _MyProfileState extends State<MyProfile> {
         occupationController.text = value['data']['occupations'];
         contactDetailController.text = value['data']['phone'];
         relationshipController.text = value['data']['relationship_status'];
+        imageUrl = "http://fitnessapp.frantic.in/" + value['data']['image'];
       });
     });
   }
@@ -117,9 +154,26 @@ class _MyProfileState extends State<MyProfile> {
                   SizedBox(
                     height: 15,
                   ),
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage("assets/images/spalsh.jpg"),
+                  GestureDetector(
+                    onTap: () {
+                      ImagePicker()
+                          .getImage(source: ImageSource.gallery)
+                          .then((value) {
+                        setState(() {
+                          print(value);
+                          imageUrl = null;
+                          imageLocal = value.path;
+                        });
+                      });
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: imageUrl == null && imageLocal == null
+                          ? AssetImage("assets/images/spalsh.jpg")
+                          : imageLocal == null
+                              ? NetworkImage(imageUrl)
+                              : FileImage(File(imageLocal)),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -483,6 +537,31 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                 ],
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            GestureDetector(
+              onTap: _trySubmit,
+              child: Container(
+                margin:
+                    EdgeInsets.only(top: 0, bottom: 10, left: 10, right: 10),
+                // width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    "UPDATE",
+                    style: TextStyle(
+                        fontSize: 21,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Color(0XFF299FAB),
+                ),
               ),
             ),
             GestureDetector(

@@ -94,8 +94,7 @@ class ApiManager extends ChangeNotifier {
       String weight,
       String height,
       String goal) async {
-    var response = await _apiRepository.registerApi(phone, email, name,
-        location, workOutExperience, gender, dob, weight, height, goal);
+    var response = await _apiRepository.registerApi(phone: phone);
     if (response['error_code'] == 1) {
       print(response['data']['client_key'].toString());
       await SharedPrefManager.savePrefString(
@@ -103,6 +102,71 @@ class ApiManager extends ChangeNotifier {
       navigatorKey.currentState.pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
       SharedPrefManager.savePreferenceBoolean(true);
+    } else {}
+  }
+
+  ///////////// Edit Profile Api ///////////////////////
+
+  Future<bool> editProfileApi(
+      {String name,
+      String gender,
+      String dob,
+      String weight,
+      String height,
+      String goal,
+      String occupations,
+      String relationship_status}) async {
+    var response = await _apiRepository.editApi(
+        name: name,
+        gender: gender,
+        dob: dob,
+        weight: weight,
+        height: height,
+        goal: goal,
+        occupations: occupations,
+        relationship_status: relationship_status);
+    if (response['error_code'] == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  ///////////// Store measurement ///////////////////////
+
+  Future storeMeasurement(
+      {String weight,
+      String neck,
+      String thigh,
+      String abs,
+      String chest,
+      String chest_triceps,
+      String right_thigh,
+      String left_thigh,
+      String lower_abs,
+      String upper_abs,
+      String right_biceps,
+      String left_biceps,
+      String shoulders,
+      String waist,
+      String hips}) async {
+    var response = await _apiRepository.storeMeasurement(
+        weight: weight,
+        neck: neck,
+        thigh: thigh,
+        abs: abs,
+        chest: chest,
+        chest_triceps: chest_triceps,
+        right_thigh: right_thigh,
+        left_thigh: left_thigh,
+        lower_abs: lower_abs,
+        upper_abs: upper_abs,
+        right_biceps: right_biceps,
+        left_biceps: left_biceps,
+        shoulders: shoulders,
+        waist: waist,
+        hips: hips);
+    if (response['error_code'] == 1) {
+      return response;
     } else {}
   }
 
@@ -130,6 +194,19 @@ class ApiManager extends ChangeNotifier {
         }
       }
       return response;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //subscribeApi
+  Future subscribeApi() async {
+    try {
+      var response = await _apiRepository.isSubscriptionTaken();
+      print(response['error_code'].toString() + "sssssss");
+      if (response['error_code'] == 0) {
+      } else {}
+      return response['data'];
     } catch (e) {
       print(e);
     }

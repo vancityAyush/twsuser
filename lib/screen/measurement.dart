@@ -65,24 +65,28 @@ class _MeasurementsState extends State<Measurements> {
       setState(() {
         _isLoad = true;
       });
-
-      await Provider.of<ApiManager>(context, listen: false).storeMeasurementApi(
-          weightController.text,
-          neckController.text,
-          thighController.text,
-          absController.text,
-          chestTricepsController.text,
-          rightThighController.text,
-          leftThighController.text,
-          hipsController.text,
-          waistController.text,
-          lowerAbsController.text,
-          upperAbsController.text,
-          rightBicepsController.text,
-          leftBicepsController.text,
-          chestController.text,
-          shoulderController.text);
-
+      var res = await Provider.of<ApiManager>(context, listen: false)
+          .storeMeasurement(
+              weight: weightController.text,
+              neck: neckController.text,
+              shoulders: shoulderController.text,
+              chest: chestController.text,
+              left_biceps: leftBicepsController.text,
+              right_biceps: rightBicepsController.text,
+              upper_abs: upperAbsController.text,
+              waist: waistController.text,
+              lower_abs: lowerAbsController.text,
+              hips: hipsController.text,
+              left_thigh: leftThighController.text,
+              right_thigh: rightThighController.text,
+              chest_triceps: chestTricepsController.text,
+              abs: absController.text,
+              thigh: thighController.text);
+      if (res['error_code'] == 1) {
+        Fluttertoast.showToast(msg: "Measurement added successfully");
+      } else {
+        Fluttertoast.showToast(msg: res['response_string']);
+      }
       setState(() {
         _isLoad = false;
       });
