@@ -4,25 +4,23 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class SubGallerydetail extends StatefulWidget {
+  final String name, description, video;
 
-  final String name,description,video;
-
-  SubGallerydetail({this.name,this.description,this.video});
+  SubGallerydetail({this.name, this.description, this.video});
 
   @override
   State<SubGallerydetail> createState() => _SubGallerydetailState();
 }
 
 class _SubGallerydetailState extends State<SubGallerydetail> {
-
   FlickManager flickManager;
 
   @override
   void initState() {
     super.initState();
     flickManager = FlickManager(
-      videoPlayerController:
-      VideoPlayerController.network("http://fitnessapp.frantic.in/"+widget.video),
+      videoPlayerController: VideoPlayerController.network(
+          "http://fitnessapp.frantic.in/" + widget.video),
     );
   }
 
@@ -39,10 +37,20 @@ class _SubGallerydetailState extends State<SubGallerydetail> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.black87,
-        title: Text(widget.name,style: TextStyle(
-            color: Colors.white
-        ),),
-        leading: Icon(Icons.arrow_back,color: Colors.white,),),
+        title: Text(
+          widget.name,
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Column(
         children: <Widget>[
           VisibilityDetector(
@@ -54,7 +62,6 @@ class _SubGallerydetailState extends State<SubGallerydetail> {
                 flickManager.flickControlManager?.autoResume();
               }
             },
-
             child: FlickVideoPlayer(
               flickManager: flickManager,
               flickVideoWithControlsFullscreen: FlickVideoWithControls(
@@ -64,33 +71,36 @@ class _SubGallerydetailState extends State<SubGallerydetail> {
               ),
             ),
           ),
-
           SizedBox(
             height: 15,
           ),
-
-          SizedBox(height: 10,),
-
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(widget.name,style: TextStyle(
-                      fontSize: 19*MediaQuery.of(context).textScaleFactor,
-                      color: Color(0XFF2CB3BF),
-                      fontWeight: FontWeight.w600
-                  ),),
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(
+                        fontSize: 19 * MediaQuery.of(context).textScaleFactor,
+                        color: Color(0XFF2CB3BF),
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
-
-                SizedBox(height: 11,),
-
-                Text(widget.description,style: TextStyle(
-                    color: Color(0XFF3F3F3F),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),)
-
+                SizedBox(
+                  height: 11,
+                ),
+                Text(
+                  widget.description,
+                  style: TextStyle(
+                      color: Color(0XFF3F3F3F),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                )
               ],
             ),
           )

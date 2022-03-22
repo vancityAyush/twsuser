@@ -115,7 +115,8 @@ class ApiManager extends ChangeNotifier {
       String height,
       String goal,
       String occupations,
-      String relationship_status}) async {
+      String relationship_status,
+      String imagePath}) async {
     var response = await _apiRepository.editApi(
         name: name,
         gender: gender,
@@ -124,7 +125,8 @@ class ApiManager extends ChangeNotifier {
         height: height,
         goal: goal,
         occupations: occupations,
-        relationship_status: relationship_status);
+        relationship_status: relationship_status,
+        imagePath: imagePath);
     if (response['error_code'] == 1) {
       return true;
     }

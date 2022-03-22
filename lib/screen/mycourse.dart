@@ -9,10 +9,8 @@ class MyCourses extends StatefulWidget {
 }
 
 class _MyCoursesState extends State<MyCourses> {
-
   Function goToTab;
   List<Slide> slides = [];
-
 
   @override
   void initState() {
@@ -21,29 +19,37 @@ class _MyCoursesState extends State<MyCourses> {
       new Slide(
         backgroundColor: Colors.white,
         backgroundBlendMode: BlendMode.colorDodge,
-        backgroundImage: "assets/images/spalsh.jpg",),);
+        backgroundImage: "assets/images/spalsh.jpg",
+      ),
+    );
     slides.add(
       new Slide(
         backgroundColor: Colors.white,
         backgroundBlendMode: BlendMode.colorDodge,
-        backgroundImage: "assets/images/spalsh.jpg",),);
+        backgroundImage: "assets/images/spalsh.jpg",
+      ),
+    );
     slides.add(
       new Slide(
         backgroundColor: Colors.white,
         backgroundBlendMode: BlendMode.colorDodge,
-        backgroundImage: "assets/images/spalsh.jpg",),);
+        backgroundImage: "assets/images/spalsh.jpg",
+      ),
+    );
     slides.add(
       new Slide(
         backgroundColor: Colors.white,
         backgroundBlendMode: BlendMode.colorDodge,
-        backgroundImage: "assets/images/spalsh.jpg",),);
-
+        backgroundImage: "assets/images/spalsh.jpg",
+      ),
+    );
   }
 
-  void onDonePress(){
-    this.goToTab(0);}
+  void onDonePress() {
+    this.goToTab(0);
+  }
 
-  void onTabChangeCompleted(){}
+  void onTabChangeCompleted() {}
 
   Widget renderNextBtn() {
     return Icon(
@@ -61,7 +67,8 @@ class _MyCoursesState extends State<MyCourses> {
   Widget renderSkipBtn() {
     return Icon(
       Icons.skip_next,
-    );}
+    );
+  }
 
   List<Widget> renderListCustomTabs() {
     List<Widget> tabs = new List();
@@ -72,7 +79,7 @@ class _MyCoursesState extends State<MyCourses> {
           child: ListView(
             children: <Widget>[
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
                 },
               ),
@@ -88,80 +95,89 @@ class _MyCoursesState extends State<MyCourses> {
     return tabs;
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.black87,
-        title: Text("My Courses",style: TextStyle(
-            color: Colors.white
-        ),),
-        leading: Icon(Icons.arrow_back,color: Colors.white,),),
+        title: Text(
+          "My Courses",
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
               height: 200,
-              child: IntroSlider(slides: this.slides,
+              child: IntroSlider(
+                  slides: this.slides,
                   showDoneBtn: false,
                   showNextBtn: false,
                   showSkipBtn: false,
                   showPrevBtn: false,
                   colorActiveDot: Colors.redAccent,
                   colorDot: Colors.white,
-                  stylePrevBtn: TextStyle(
-                      color: Colors.white),
-                  styleDoneBtn: TextStyle(
-                      color: Colors.white),
-                  styleSkipBtn: TextStyle(
-                      color: Colors.white),
+                  stylePrevBtn: TextStyle(color: Colors.white),
+                  styleDoneBtn: TextStyle(color: Colors.white),
+                  styleSkipBtn: TextStyle(color: Colors.white),
                   onDonePress: () {
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
                   }),
             ),
-
-            SizedBox(height: 15,),
-
-            Text("Upgrade to TWS premium",
-            style: TextStyle(
-              fontSize: 21*MediaQuery.of(context).textScaleFactor,
-              color: Color(0XFF4E4E4E),
-              fontWeight: FontWeight.w600
-            ),),
-
-            Text("and get all benefits at one place",
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              "Upgrade to TWS premium",
               style: TextStyle(
-                  fontSize: 15*MediaQuery.of(context).textScaleFactor,
+                  fontSize: 21 * MediaQuery.of(context).textScaleFactor,
                   color: Color(0XFF4E4E4E),
-                  fontWeight: FontWeight.normal
-              ),),
-
+                  fontWeight: FontWeight.w600),
+            ),
+            Text(
+              "and get all benefits at one place",
+              style: TextStyle(
+                  fontSize: 15 * MediaQuery.of(context).textScaleFactor,
+                  color: Color(0XFF4E4E4E),
+                  fontWeight: FontWeight.normal),
+            ),
             ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 6,
-                itemBuilder: (context,index){
-              return ListTile(
-                leading: Icon(Icons.check,color: Color(0XFF2CB3BF),),
-                title: Text("Customized Diet Plan",style: TextStyle(
-                  fontSize: 16*MediaQuery.of(context).textScaleFactor,
-                  color: Color(0XFF4E4E4E),
-                  fontWeight: FontWeight.normal
-                ),),
-              );
-            }),
-
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Icon(
+                      Icons.check,
+                      color: Color(0XFF2CB3BF),
+                    ),
+                    title: Text(
+                      "Customized Diet Plan",
+                      style: TextStyle(
+                          fontSize: 16 * MediaQuery.of(context).textScaleFactor,
+                          color: Color(0XFF4E4E4E),
+                          fontWeight: FontWeight.normal),
+                    ),
+                  );
+                }),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 return showDialog(
                     context: context,
                     builder: (ctx) => Dialog(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7.0)
-                        ),
+                            borderRadius: BorderRadius.circular(7.0)),
                         child: Stack(
                           overflow: Overflow.visible,
                           alignment: Alignment.topCenter,
@@ -169,21 +185,34 @@ class _MyCoursesState extends State<MyCourses> {
                             Container(
                               height: 330,
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("Enter Trainer's Referral Code?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,
-                                    color: Color(0XFF2CB3BF)),),
-                                    SizedBox(height: 20,),
+                                    Text(
+                                      "Enter Trainer's Referral Code?",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Color(0XFF2CB3BF)),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
                                     Column(
                                       children: [
                                         TextFormField(
-                                          autovalidateMode: AutovalidateMode.always,
-                                          style: TextStyle(color: Color(0XFF262626)),
-                                          decoration: InputDecoration(fillColor: Color(0XFFF2F2F2), filled: true,
+                                          autovalidateMode:
+                                              AutovalidateMode.always,
+                                          style: TextStyle(
+                                              color: Color(0XFF262626)),
+                                          decoration: InputDecoration(
+                                            fillColor: Color(0XFFF2F2F2),
+                                            filled: true,
                                             border: InputBorder.none,
-                                            hintText: "Enter Trainer's Referral Code",
+                                            hintText:
+                                                "Enter Trainer's Referral Code",
                                           ),
                                           // decoration: const InputDecoration(
                                           //   hintText: 'Bio',
@@ -195,44 +224,47 @@ class _MyCoursesState extends State<MyCourses> {
                                             // code when the user saves the form.
                                           },
                                         ),
-
-                                        SizedBox(height: 20,),
-
+                                        SizedBox(
+                                          height: 20,
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.all(5.0),
-                                          child: Text("Trainer's referral code is the code given by your trainer to access the premium account of team with someone",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Color(0XFFAEAEAE)
-                                          ),),
+                                          child: Text(
+                                            "Trainer's referral code is the code given by your trainer to access the premium account of team with someone",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0XFFAEAEAE)),
+                                          ),
                                         ),
-
-
                                         GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.pop(context);
                                           },
                                           child: Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            margin: const EdgeInsets.only(top: 30,),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: const EdgeInsets.only(
+                                              top: 30,
+                                            ),
                                             height: 50,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(30),
-                                                color: Color(0XFF2CB3BF)
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                color: Color(0XFF2CB3BF)),
                                             child: Center(
-                                              child: Text("SUBMIT",
+                                              child: Text(
+                                                "SUBMIT",
                                                 style: TextStyle(
                                                     fontSize: 17,
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.w600
-                                                ),),
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
                                             ),
                                           ),
                                         ),
-
-
                                       ],
                                     )
                                   ],
@@ -240,8 +272,7 @@ class _MyCoursesState extends State<MyCourses> {
                               ),
                             ),
                           ],
-                        )
-                    ));
+                        )));
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -249,15 +280,15 @@ class _MyCoursesState extends State<MyCourses> {
                 height: 55,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                  color: Color(0XFF2CB3BF)
-                ),
+                    color: Color(0XFF2CB3BF)),
                 child: Center(
-                  child: Text("Enter Trainer's Referral Code",
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600
-                  ),),
+                  child: Text(
+                    "Enter Trainer's Referral Code",
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ),

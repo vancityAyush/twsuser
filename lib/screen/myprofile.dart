@@ -41,7 +41,8 @@ class _MyProfileState extends State<MyProfile> {
             goal: goalController.text,
             occupations: occupationController.text,
             //contactDetailController.text,
-            relationship_status: relationshipController.text);
+            relationship_status: relationshipController.text,
+            imagePath: imageLocal);
     if (res) {
       Fluttertoast.showToast(
           msg: "Profile Updated",

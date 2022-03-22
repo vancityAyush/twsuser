@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:twsuser/apiService/apiResponse/ResponseBlogs.dart';
 import 'package:twsuser/apiService/apiResponse/ResponseFetchChatMessage.dart';
@@ -89,8 +91,11 @@ class APIRepository {
     String goal,
     String occupations,
     String relationship_status,
+    String imagePath,
   }) async {
     var key = await SharedPrefManager.getPrefrenceString(AppConstant.KEY);
+    File image = File(imagePath);
+    String fileName = image.path.split('/').last;
     FormData formData = new FormData.fromMap({
       "name": name,
       "gender": gender,
@@ -100,6 +105,7 @@ class APIRepository {
       "goal": goal,
       "occupations": occupations,
       "relationship_status": relationship_status,
+      "image": await MultipartFile.fromFile(image.path, filename: fileName),
       "key": key
     });
     try {

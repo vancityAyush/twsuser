@@ -107,7 +107,7 @@ class _SubWorkOutState extends State<SubWorkOut> {
                               color: Color(0XFF2CB3BF)
                           ),),
 
-                          subtitle: Text("Monday  10 May 2021 12:57 PM",style: TextStyle(
+                          subtitle: Text("${selectedDate.day} ${selectedDate.month} ${selectedDate.year}",style: TextStyle(
                               fontSize: 13*MediaQuery.of(context).textScaleFactor,
                               fontWeight: FontWeight.w600,
                               color: Color(0XFF262626)
@@ -132,11 +132,6 @@ class _SubWorkOutState extends State<SubWorkOut> {
                                 children: [
                                   Icon(Icons.access_time,size: 19,color: Colors.redAccent,),
                                   SizedBox(width: 3,),
-                                  Text("12:57 MIN",style: TextStyle(
-                                      fontSize: 12*MediaQuery.of(context).textScaleFactor,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0XFF262626)
-                                  ),),
                                 ],
                               ),
                               SizedBox(width: 14,),
