@@ -167,22 +167,12 @@ class _TrainerPreviewState extends State<TrainerPreview> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                                radius: 20,
-                                                backgroundColor: Colors.white),
-                                            SizedBox(
-                                              width: 7,
-                                            ),
-                                            Text(
-                                              data.name,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
+                                        Text(
+                                          data.name,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ],
                                     ),

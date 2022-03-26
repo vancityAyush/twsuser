@@ -84,7 +84,7 @@ class ApiManager extends ChangeNotifier {
   ///////////// register Api ///////////////////////
 
   Future registerApi(
-      String phone,
+      {String phone,
       String email,
       String name,
       String location,
@@ -93,8 +93,18 @@ class ApiManager extends ChangeNotifier {
       String dob,
       String weight,
       String height,
-      String goal) async {
-    var response = await _apiRepository.registerApi(phone: phone);
+      String goal}) async {
+    var response = await _apiRepository.registerApi(
+        phone: phone,
+        email: email,
+        name: name,
+        location: location,
+        workOutExperience: workOutExperience,
+        gender: gender,
+        dob: dob,
+        weight: weight,
+        height: height,
+        goal: goal);
     if (response['error_code'] == 1) {
       print(response['data']['client_key'].toString());
       await SharedPrefManager.savePrefString(
